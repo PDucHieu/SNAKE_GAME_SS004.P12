@@ -17,6 +17,10 @@ number_of_cells = 25
 
 OFFSET = 75
 
+screen_info = pygame.display.Info()
+screen_width = screen_info.current_w
+screen_height = screen_info.current_h
+
 class Food:
     def __init__(self, snake_body):
         self.position = self.generate_random_pos(snake_body)
@@ -98,7 +102,7 @@ class Game:
         if self.snake.body[0] in headless_body:
             self.game_over()
     
-screen = pygame.display.set_mode ((2*OFFSET + cell_size*number_of_cells, 2*OFFSET + cell_size*number_of_cells))
+screen = pygame.display.set_mode ((screen_width, screen_height), pygame.FULLSCREEN)
 
 pygame.display.set_caption("SNAKE GAME")
 
