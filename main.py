@@ -12,12 +12,14 @@ DARK_GREEN = (43, 51, 24)
 cell_size = 30
 number_of_cells = 25
 
+OFFSET = 75
+
 class Food:
     def __init__(self, snake_body):
         self.position = self.generate_random_pos(snake_body)
     
     def draw(self):
-        food_rect = pygame.Rect(self.position.x * cell_size, self.position.y * cell_size, cell_size, cell_size)
+        food_rect = pygame.Rect( OFFSET + self.position.x * cell_size, OFFSET + self.position.y * cell_size, cell_size, cell_size)
         pygame.draw.rect(screen, DARK_GREEN, food_rect)
     
     def generate_random_cell(self):
@@ -33,13 +35,13 @@ class Food:
 
 class Snake:
     def __init__(self):
-        self.body = [Vector2(1, 1), Vector2(2,1), Vector2(3,1)]
+        self.body = [Vector2(3, 1), Vector2(2,1), Vector2(1,1)]
         self.direction = Vector2(1, 0)
         self.add_segment = False
         
     def draw(self):
         for segment in self.body:
-            segment_rect = (segment.x * cell_size, segment.y * cell_size, cell_size, cell_size)
+            segment_rect = (OFFSET + segment.x * cell_size, OFFSET + segment.y * cell_size, cell_size, cell_size)
             pygame.draw.rect(screen, DARK_GREEN, segment_rect, 0, 7 )  
     def update(self):
         self.body.insert(0, self.body[0] + self.direction)
@@ -49,7 +51,7 @@ class Snake:
             self.body = self.body[:-1]
     
     def reset(self):
-        self.body = [Vector2(1, 1), Vector2(2, 1), Vector2(3, 1)]
+        self.body = [Vector2(3, 1), Vector2(2, 1), Vector2(1, 1)]
         self.direction = Vector2(1, 0)
         
 class Game:
@@ -90,7 +92,7 @@ class Game:
         if self.snake.body[0] in headless_body:
             self.game_over()
     
-screen = pygame.display.set_mode ((cell_size*number_of_cells, cell_size*number_of_cells))
+screen = pygame.display.set_mode ((2*OFFSET + cell_size*number_of_cells, 2*OFFSET + cell_size*number_of_cells))
 
 pygame.display.set_caption("Snake Game")
 
@@ -112,17 +114,21 @@ while True:
         if event.type == pygame.KEYDOWN:
             if game.state == "STOPPED":
                 game.state = "RUNNING"
-            if event.key == pygame.K_UP and game.snake.direction != Vector2(0, 1):
-                game.snake.direction = Vector2(0, -1)
-            if event.key == pygame.K_DOWN and game.snake.direction != Vector2(0, -1):
-                game.snake.direction = Vector2(0, 1)
-            if event.key == pygame.K_LEFT and game.snake.direction != Vector2(1, 0):
-                game.snake.direction = Vector2(-1, 0)
-            if event.key == pygame.K_RIGHT and game.snake.direction != Vector2(-1, 0):
-                game.snake.direction = Vector2(1, 0)
+            else:
+                if event.key == pygame.K_UP and game.snake.direction != Vector2(0, 1):
+                    game.snake.direction = Vector2(0, -1)
+                if event.key == pygame.K_DOWN and game.snake.direction != Vector2(0, -1):
+                    game.snake.direction = Vector2(0, 1)
+                if event.key == pygame.K_LEFT and game.snake.direction != Vector2(1, 0):
+                    game.snake.direction = Vector2(-1, 0)
+                if event.key == pygame.K_RIGHT and game.snake.direction != Vector2(-1, 0):
+                    game.snake.direction = Vector2(1, 0)
     
             
     screen.fill(GREEN)        
+    pygame.draw.rect(screen, DARK_GREEN, 
+                     (OFFSET - 5, OFFSET - 5, cell_size * number_of_cells + 10, cell_size * number_of_cells +10), 5)
     game.draw()
+    
     pygame.display.update()
     clock.tick(60)
