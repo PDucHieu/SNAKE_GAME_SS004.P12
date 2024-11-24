@@ -6,13 +6,15 @@ from pygame.math import Vector2
 
 pygame.init()
 
+title_font = pygame.font.Font(None, 60)
+
 GREEN = (173, 204, 96)
 DARK_GREEN = (43, 51, 24)
 
 cell_size = 30
 number_of_cells = 25
 
-OFFSET = 75
+OFFSET = 50
 
 class Food:
     def __init__(self, snake_body):
@@ -94,7 +96,7 @@ class Game:
     
 screen = pygame.display.set_mode ((2*OFFSET + cell_size*number_of_cells, 2*OFFSET + cell_size*number_of_cells))
 
-pygame.display.set_caption("Snake Game")
+pygame.display.set_caption("SNAKE GAME")
 
 clock = pygame.time.Clock()
 
@@ -129,6 +131,8 @@ while True:
     pygame.draw.rect(screen, DARK_GREEN, 
                      (OFFSET - 5, OFFSET - 5, cell_size * number_of_cells + 10, cell_size * number_of_cells +10), 5)
     game.draw()
+    title_surface = title_font.render("SNAKE GAME", True, DARK_GREEN)
+    screen.blit(title_surface, (OFFSET - 5, 20))
     
     pygame.display.update()
     clock.tick(60)
